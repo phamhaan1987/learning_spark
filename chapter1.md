@@ -1,4 +1,4 @@
-<div style="text-align: justify;">
+<div align="justify">
 
 # Introduction to Apache Spark: A Unified Analytics Engine
 
@@ -10,8 +10,7 @@
 ### Spark’s Early Years at AMPLab
 
 ## What Is Apache Spark
-Apache Spark is a unified engine designed for large-scale distributed data processing, on premises in data centers or in the cloud
-Spark’s design philosophy centers around four key characteristics: Speed, Ease of use, Modularity, Extensibility
+Apache Spark is a unified engine designed for large-scale distributed data processing, on premises in data centers or in the cloud Spark’s design philosophy centers around four key characteristics: Speed, Ease of use, Modularity, Extensibility
 
 ### Speed
 - the hardware industry’s recent huge strides in improving the price and performance of CPUs and memory
