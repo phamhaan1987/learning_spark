@@ -38,71 +38,71 @@ Each of these components is separate from Spark’s core fault-tolerant engine, 
 #### Spark SQL
 This module works well with *structured data*. You can *read data stored in an RDBMS table or from file formats with structured data (CSV, text, JSON, Avro, ORC, Parquet, etc.)* and *then construct permanent or temporary tables in Spark*. Also, when using Spark’s Structured APIs in Java, Python, Scala, or R, you can combine SQL-like queries to query the data just read into a Spark DataFrame. To date, Spark SQL is ANSI SQL:2003-compliant and it also functions as a pure SQL engine.
     
-    ```
-    // Read data off Amazon S3 bucket into a Spark DataFrame
-    spark.read.json("s3://apache_spark/data/committers.json").createOrReplaceTempView("committers")
-    // Issue a SQL query and return the result as a Spark DataFrame
-    results = spark.sql("""SELECT name, org, module, release, num_commits FROM committers WHERE module = 'mllib' AND num_commits > 10 ORDER BY num_commits DESC""")
-    ```
+```scala
+// Read data off Amazon S3 bucket into a Spark DataFrame
+spark.read.json("s3://apache_spark/data/committers.json").createOrReplaceTempView("committers")
+// Issue a SQL query and return the result as a Spark DataFrame
+results = spark.sql("""SELECT name, org, module, release, num_commits FROM committers WHERE module = 'mllib' AND num_commits > 10 ORDER BY num_commits DESC""")
+```
 
 #### Spark MLlib
 Spark comes with a library containing common machine learning (ML) algorithms called MLlib.
 MLlib provides many popular machine learning algorithms built atop high-level DataFrame-based APIs to build models. These APIs allow you to extract or transform features, build pipelines (for training and evaluating), and persist models (for saving and reloading them) during deployment. Additional utilities include the use of common linear algebra operations and statistics.
 
-    ```
-    # In Python
-    from pyspark.ml.classification import LogisticRegression
-    ...
-    training = spark.read.csv("s3://...")
-    test = spark.read.csv("s3://...")
-    # Load training data
-    lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
-    # Fit the model
-    lrModel = lr.fit(training)
-    # Predict
-    lrModel.transform(test)
-    ...
-    ```
+```python
+# In Python
+from pyspark.ml.classification import LogisticRegression
+...
+training = spark.read.csv("s3://...")
+test = spark.read.csv("s3://...")
+# Load training data
+lr = LogisticRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
+# Fit the model
+lrModel = lr.fit(training)
+# Predict
+lrModel.transform(test)
+...
+```
 
 #### Spark Structured Streaming
 Apache Spark 2.0 introduced an experimental Continuous Streaming model and Structured Streaming APIs, built atop the Spark SQL engine and DataFrame-based APIs. By Spark 2.2, Structured Streaming was generally available, meaning that developers could use it in their production environments.
 Necessary for big data developers to combine and react in real time to both static data and streaming data from engines like Apache Kafka and other streaming sources, the new model views a stream as a continually growing table, with new rows of data appended at the end. Developers can merely treat this as a structured table and issue queries against it as they would a static table.
 
-    ```
-    # In Python
-    # Read a stream from a local host
-    from pyspark.sql.functions import explode, split
-    lines = (
-        spark.readStream
-        .format("socket")
-        .option("host", "localhost")
-        .option("port", 9999)
-        .load()
-    )
-    # Perform transformation
-    # Split the lines into words
-    words = lines.select(explode(split(lines.value, " ")).alias("word"))
-    # Generate running word count
-    word_counts = words.groupBy("word").count()
-    # Write out to the stream to Kafka
-    query = (
-        word_counts.writeStream
-        .format("kafka")
-        .option("topic", "output")
-    )
-    ```
+```python
+# In Python
+# Read a stream from a local host
+from pyspark.sql.functions import explode, split
+lines = (
+    spark.readStream
+    .format("socket")
+    .option("host", "localhost")
+    .option("port", 9999)
+    .load()
+)
+# Perform transformation
+# Split the lines into words
+words = lines.select(explode(split(lines.value, " ")).alias("word"))
+# Generate running word count
+word_counts = words.groupBy("word").count()
+# Write out to the stream to Kafka
+query = (
+    word_counts.writeStream
+    .format("kafka")
+    .option("topic", "output")
+)
+```
 
 #### GraphX
 As the name suggests, GraphX is a library for manipulating graphs (e.g., social network graphs, routes and connection points, or network topology graphs) and performing graph-parallel computations. It offers the standard graph algorithms for analysis, connections, and traversals, contributed by users in the community: the available algorithms include PageRank, Connected Components, and Triangle Counting.
 
-    ```
-    // In Scala
-    val graph = Graph(vertices, edges)
-    messages = spark.textFile("hdfs://...")
-    val graph2 = graph.joinVertices(messages) {
-    (id, vertex, msg) => ...
-    }
-    ```
+```scala
+// In Scala
+val graph = Graph(vertices, edges)
+messages = spark.textFile("hdfs://...")
+val graph2 = graph.joinVertices(messages) {
+(id, vertex, msg) => ...
+}
+```
 
 ### Apache Spark’s Distributed Execution
 Spark is a distributed data processing engine with its components working collaboratively on a cluster of machines. You need to understand how all the components of Spark’s distributed architecture work together and communicate, and what deployment modes are available.
@@ -119,22 +119,22 @@ SparkSession became a unified conduit to all Spark operations and data.
 Through this one conduit, you can create JVM runtime parameters, define DataFrames and Datasets, read from data sources, access catalog metadata, and issue Spark SQL queries. SparkSession provides a single unified entry point to all of Spark’s functionality.
 In a standalone Spark application, you can create a SparkSession using one of the high-level APIs in the programming language of your choice. In the Spark shell (more on this in the next chapter) the SparkSession is created for you, and you can access it via a global variable called spark or sc.
 
-    ```
-    // In Scala
-    import org.apache.spark.sql.SparkSession
-    // Build SparkSession
-    val spark = SparkSession
-    .builder
-    .appName("LearnSpark")
-    .config("spark.sql.shuffle.partitions", 6)
-    .getOrCreate()
-    ...
-    // Use the session to read JSON
-    val people = spark.read.json("...")
-    ...
-    // Use the session to issue a SQL query
-    val resultsDF = spark.sql("SELECT city, pop, state, zip FROM table_name")
-    ```
+```scala
+// In Scala
+import org.apache.spark.sql.SparkSession
+// Build SparkSession
+val spark = SparkSession
+.builder
+.appName("LearnSpark")
+.config("spark.sql.shuffle.partitions", 6)
+.getOrCreate()
+...
+// Use the session to read JSON
+val people = spark.read.json("...")
+...
+// Use the session to issue a SQL query
+val resultsDF = spark.sql("SELECT city, pop, state, zip FROM table_name")
+```
 #### Cluster manager
 The cluster manager is responsible for managing and allocating resources for the cluster of nodes on which your Spark application runs. Currently, Spark supports four cluster managers: the built-in standalone cluster manager, Apache Hadoop YARN, Apache Mesos, and Kubernetes.
 #### Spark executor
