@@ -1,3 +1,5 @@
+<div style="text-align: justify;">
+
 # Introduction to Apache Spark: A Unified Analytics Engine
 
 ## The Genesis of Spark
@@ -198,3 +200,5 @@ Whether you are a data engineer, data scientist, or machine learning engineer, y
 Not surprisingly, Apache Spark struck a chord in the open source community, especially among data engineers and data scientists. Its design philosophy and its inclusion as an Apache Software Foundation project have fostered immense interest among the developer community.
 Today, there are over 600 [Apache Spark Meetup groups](https://www.meetup.com/topics/apache-spark/) globally with close to half a million members. Every week, someone in the world is giving a talk at a meetup or conference or sharing a blog post on how to use Spark to build data pipelines. The [Spark + AI Summit](https://www.databricks.com/dataaisummit) is the largest conference dedicated to the use of Spark for machine learning, data engineering, and data science across many verticals.
 Over the course of its releases, Spark has continued to attract contributors from across the globe and from numerous organizations. Today, Spark has close to 1,500 contributors, well over 100 releases, 21,000 forks, and some 27,000 commits on GitHub.
+
+</div>
