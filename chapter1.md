@@ -144,7 +144,7 @@ An attractive feature of Spark is its support for myriad deployment modes, enabl
 
 | Mode | Spark driver | Spark executor | Cluster manager |
 | :--- | :--- | :--- | :--- |
-| Local | Runs on a single JVM, like a | laptop or single node | Runs on the same JVM as the driver | Runs on the same host |
+| Local | Runs on a single JVM, like a laptop or single node | Runs on the same JVM as the driver | Runs on the same host |
 | Standalone | Can run on any node in the cluster | Each node in the cluster will launch its own executor JVM | Can be allocated arbitrarily to any host in the cluster |
 | YARN (client) | Runs on a client, not part of the cluster | YARN’s NodeManager’s container | YARN’s Resource Manager works with YARN’s Application Master to allocate the containers on NodeManagers for executors |
 | YARN (cluster) | Runs with the YARN Application Master | Same as YARN client mode | Same as YARN client mode |
@@ -160,17 +160,17 @@ Partitioning allows for efficient parallelism. A distributed scheme of breaking 
 ![Each executor’s core gets a partition of data to work on](images/Figure1-6.png)
 
 For example, this code snippet will break up the physical data stored across clusters into eight partitions, and each executor will get one or more partitions to read into its memory:
-    ```
-    # In Python
-    log_df = spark.read.text("path_to_large_text_file").repartition(8)
-    print(log_df.rdd.getNumPartitions())
-    ```
+```python
+# In Python
+log_df = spark.read.text("path_to_large_text_file").repartition(8)
+print(log_df.rdd.getNumPartitions())
+```
 And this code will create a DataFrame of 10,000 integers distributed over eight partitions in memory:
-    ```
-    # In Python
-    df = spark.range(0, 10000, 1, 8)
-    print(df.rdd.getNumPartitions())
-    ```
+```python
+# In Python
+df = spark.range(0, 10000, 1, 8)
+print(df.rdd.getNumPartitions())
+```
 
 ## The Developer’s Experience
 Of all the developers’ delights, none is more attractive than a set of composable APIs that increase productivity and are easy to use, intuitive, and expressive. One of Apache Spark’s principal appeals to developers has been its easy-to-use APIs for operating on small to large data sets, across languages: Scala, Java, Python, SQL, and R.
